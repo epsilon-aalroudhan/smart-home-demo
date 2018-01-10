@@ -1,5 +1,5 @@
-/Users/aalroudhan/Documents/projects/smart-home/smartHome/core/src/main/java/com/epsilon/smarthome/core/schedulers/SimpleScheduledTask.java
-/Users/aalroudhan/Documents/projects/smart-home/smartHome/core/src/main/java/com/epsilon/smarthome/core/listeners/SimpleResourceListener.java
-/Users/aalroudhan/Documents/projects/smart-home/smartHome/core/src/main/java/com/epsilon/smarthome/core/package-info.java
-/Users/aalroudhan/Documents/projects/smart-home/smartHome/core/src/main/java/com/epsilon/smarthome/core/filters/LoggingFilter.java
-/Users/aalroudhan/Documents/projects/smart-home/smartHome/core/src/main/java/com/epsilon/smarthome/core/servlets/SmartHomeServlet.java
+/Users/aalroudhan/Documents/projects/SmartHome/core/src/main/java/com/epsilon/smarthome/core/schedulers/SimpleScheduledTask.java
+/Users/aalroudhan/Documents/projects/SmartHome/core/src/main/java/com/epsilon/smarthome/core/servlets/SmartHomeServlet.java
+/Users/aalroudhan/Documents/projects/SmartHome/core/src/main/java/com/epsilon/smarthome/core/package-info.java
+/Users/aalroudhan/Documents/projects/SmartHome/core/src/main/java/com/epsilon/smarthome/core/filters/LoggingFilter.java
+/Users/aalroudhan/Documents/projects/SmartHome/core/src/main/java/com/epsilon/smarthome/core/listeners/SimpleResourceListener.java

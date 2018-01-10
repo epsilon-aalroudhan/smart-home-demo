@@ -65,7 +65,10 @@ public class SmartHomeServlet extends SlingAllMethodsServlet {
                 param.put(ResourceResolverFactory.SUBSERVICE, "readService");
                 ResourceResolver resourceResolver=null;
                 resourceResolver = resolverFactory.getServiceResourceResolver(param);
-                Resource res = resourceResolver.getResource("/content/xxx/xxxx/jcr:content/par/sh-article");
+                
+                //todo change this to the path of the page where the component sits 
+                //keep the /jcr:content/sh-article
+                Resource res = resourceResolver.getResource("/content/xxx/xxxx/xxxx/xxxx/jcr:content/par/sh-article");
                 Node myNode = res.adaptTo(Node.class);
                 
                 if (this.title != null && !title.isEmpty())
