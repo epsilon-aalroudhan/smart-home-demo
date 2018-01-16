@@ -15,6 +15,7 @@
  */
 package com.epsilon.smarthome.core.servlets;
 
+import org.apache.felix.scr.annotations.Property;
 import org.apache.felix.scr.annotations.Reference;
 import org.apache.felix.scr.annotations.sling.SlingServlet;
 import org.apache.sling.api.SlingHttpServletRequest;
@@ -44,6 +45,7 @@ import java.util.Map;
  */
 @SuppressWarnings("serial")
 @SlingServlet(paths = "/bin/smarthome/update")
+@Property(name = "sling.auth.requirements", value = "-/bin/smarthome/update")
 public class SmartHomeServlet extends SlingAllMethodsServlet {
 	private final Logger log = LoggerFactory.getLogger(SmartHomeServlet.class);
 	private String title = "";
@@ -76,8 +78,10 @@ public class SmartHomeServlet extends SlingAllMethodsServlet {
                 if (this.body != null && !this.body.isEmpty())
             	myNode.setProperty("body", this.body);
                 
+                
                 Session session = resourceResolver.adaptTo(Session.class);
                 session.save();
+                response.getWriter().write("test");
 
             }else{
                 response.getWriter().write("please either providele or body text");
