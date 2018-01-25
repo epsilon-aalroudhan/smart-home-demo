@@ -132,5 +132,11 @@
             <groupId>junit-addons</groupId>
             <artifactId>junit-addons</artifactId>
         </dependency>
+        
+        <dependency>
+          <groupId>org.apache.pdfbox</groupId>
+          <artifactId>pdfbox</artifactId>
+          <version>1.6.0</version>
+        </dependency>
     </dependencies>
 </project>
