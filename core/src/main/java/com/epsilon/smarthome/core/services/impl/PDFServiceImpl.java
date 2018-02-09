@@ -2,9 +2,11 @@ package com.epsilon.smarthome.core.services.impl;
 import java.util.Calendar; 
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
-    
+import org.xhtmlrenderer.pdf.ITextRenderer;
+
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
+import java.io.FileOutputStream;
 import java.io.StringWriter;
 import java.util.Iterator;
 import java.util.List;
@@ -75,41 +77,27 @@ public String createPDF(String filename,String value) {
           
 try
 {
-    //Create the PDFBOx Object
-    // Create a new empty document
-    PDDocument document = new PDDocument();
-  
-    // Create a document and add a page to it
-    PDPage page = new PDPage();
-    document.addPage( page );
-     
-    log.info("GOT HERE");
-  
-    // Create a new font object selecting one of the PDF base fonts
-    PDFont font = PDType1Font.HELVETICA_BOLD;
-  
-    // Start a new content stream which will "hold" the to be created content
-    PDPageContentStream contentStream = new PDPageContentStream(document, page);
-  
-    // Define a text content stream using the selected font, moving the cursor and drawing the text "Hello World"
-    contentStream.beginText();
-    contentStream.setFont( font, 12 );
-    contentStream.moveTextPositionByAmount( 100, 700 );
-    contentStream.drawString( value );
-    contentStream.endText();
-  
-    // Make sure that the content stream is closed:
-    contentStream.close();
+	ITextRenderer renderer = new ITextRenderer();
+
+    // if you have html source in hand, use it to generate document object
+    renderer.setDocumentFromString( "<html><body><strong>Hello</strong> <em>world</em>!</body></html>" );
+    renderer.layout();
+
+    String fileNameWithPath = "C:/Users/Goran/Documents/Documents/Development/workspace/FlyingSaucer/data/output/" + "PDF-FromHtmlString.pdf";
+    FileOutputStream fos = new FileOutputStream( fileNameWithPath );
+
+
+    System.out.println( "File 2: '" + fileNameWithPath + "' created." );
               
     //Save the PDF into the AEM DAM
     ByteArrayOutputStream out = new ByteArrayOutputStream();
                   
-    document.save(out);
+    renderer.createPDF(out);
                   
     byte[] myBytes = out.toByteArray(); 
         InputStream is = new ByteArrayInputStream(myBytes) ; 
     String damLocation = writeToDam(is,filename);
-    document.close();
+    out.close();
               
     //....
     return damLocation; 
