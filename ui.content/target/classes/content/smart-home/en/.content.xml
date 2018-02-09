@@ -26,6 +26,9 @@
             <servicecomponent
                 jcr:primaryType="nt:unstructured"
                 sling:resourceType="smart-home/components/content/helloworld"/>
+            <sh_article
+                jcr:primaryType="nt:unstructured"
+                sling:resourceType="smart-home/components/content/sh-article"/>
             <title_1
                 jcr:primaryType="nt:unstructured"
                 jcr:title="Lorem ipsum"
