@@ -21,12 +21,10 @@ import org.apache.felix.scr.annotations.sling.SlingServlet;
 import org.apache.sling.api.SlingHttpServletRequest;
 import org.apache.sling.api.SlingHttpServletResponse;
 import org.apache.sling.api.resource.LoginException;
-import org.apache.sling.api.resource.Resource;
 import org.apache.sling.api.resource.ResourceResolver;
 import org.apache.sling.api.servlets.SlingAllMethodsServlet;
 import org.apache.sling.api.servlets.SlingSafeMethodsServlet;
 import org.apache.sling.commons.json.JSONException;
-import org.apache.sling.commons.json.JSONObject;
 import org.apache.sling.api.resource.ResourceResolverFactory;
 
 import org.slf4j.Logger;
@@ -36,14 +34,13 @@ import com.adobe.granite.crypto.CryptoException;
 import com.adobe.granite.crypto.CryptoSupport;
 import com.adobe.granite.workflow.WorkflowException;
 import com.adobe.granite.workflow.WorkflowSession;
-import com.adobe.granite.workflow.exec.Workflow;
-import com.adobe.granite.workflow.exec.WorkflowData;
-
-import javax.jcr.Node;
+import com.adobe.granite.workflow.exec.Route;
+import com.adobe.granite.workflow.exec.WorkItem;
 import javax.jcr.Session;
 import javax.servlet.ServletException;
 import java.io.IOException;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -53,12 +50,11 @@ import java.util.Map;
  * idempotent. For write operations use the {@link SlingAllMethodsServlet}.
  */
 @SuppressWarnings("serial")
-@SlingServlet(paths = "/bin/smarthome/update")
-@Property(name = "sling.auth.requirements", value = "-/bin/smarthome/update")
-public class SmartHomeServlet extends SlingAllMethodsServlet {
-	private final Logger log = LoggerFactory.getLogger(SmartHomeServlet.class);
-	private String title = "";
-	private String body = "";
+@SlingServlet(paths = "/bin/smarthome/workflow")
+@Property(name = "sling.auth.requirements", value = "-/bin/smarthome/workflow")
+public class WorkFlowApprovalServlet extends SlingAllMethodsServlet {
+	private final Logger log = LoggerFactory.getLogger(WorkFlowApprovalServlet.class);
+
 	private SlingHttpServletRequest wfRequest = null;
 	private ResourceResolver resourceResolver = null;
 	private Session session;
@@ -77,30 +73,9 @@ public class SmartHomeServlet extends SlingAllMethodsServlet {
 		log.debug("Entered Do Post");
 		try {
 			this.resourceResolver = getResourceResolver();
-			if (request.getParameter("title") != null || request.getParameter("body") != null) {
-				this.title = request.getParameter("title");
-				this.body = request.getParameter("body");
-
-				
-
-				// todo change this to the path of the page where the component sits
-				// keep the /jcr:content/sh-article
-				Resource res = this.resourceResolver.getResource("/content/smart-home/en/jcr:content/par/sh_article");
-				if (res != null) {
-					Node myNode = res.adaptTo(Node.class);
-
-					if (this.title != null && !title.isEmpty())
-						myNode.setProperty("title", this.title);
-					if (this.body != null && !this.body.isEmpty())
-						myNode.setProperty("body", this.body);
-
-					Session session = this.resourceResolver.adaptTo(Session.class);
-					session.save();
-					response.getWriter().write("Title and Body Updated successfully");
-				}
-			} else {
-				response.getWriter().write("Please provide title or body");
-			}
+			
+				response.getWriter().write(wfAdvance());
+			
 
 		} catch (Exception e) {
 			log.error("", e);
@@ -109,7 +84,39 @@ public class SmartHomeServlet extends SlingAllMethodsServlet {
 		}
 	}
 	
-	
+	public String wfAdvance() throws LoginException, JSONException, WorkflowException{
+		if(wfRequest.getParameter("wfid") != null){
+			
+			SlingHttpServletRequest slingReq = wfRequest;
+			String wfID = wfRequest.getParameter("wfid");
+			Map<String,Object> authenticationInfo = new HashMap<String, Object>(2);
+			//to do remove hard coded credentials
+	        authenticationInfo.put(ResourceResolverFactory.USER, "admin");
+	        
+	        String unprotectedPass;
+	        try {
+	            unprotectedPass = cryptoSupport.unprotect("admin");
+	        } catch (CryptoException e) {
+	            unprotectedPass = "admin";
+	            log.error(e.getMessage());
+	        }
+	        authenticationInfo.put(ResourceResolverFactory.PASSWORD, unprotectedPass.toCharArray());
+	        ResourceResolver rResourceResolver = resolverFactory.getResourceResolver(authenticationInfo);
+			session = rResourceResolver.adaptTo(Session.class);
+			WorkflowSession wfSession = rResourceResolver.adaptTo(WorkflowSession.class);
+			
+			WorkItem workItem = wfSession.getWorkflow(wfID).getWorkItems().get(0);
+			
+			// getting routes
+			List<Route> routes = wfSession.getRoutes(workItem, false);
+	        
+			// completing or advancing to the next step
+			wfSession.complete(workItem, routes.get(0));
+			return "Approved";
+		}else{
+			return "no workflow id provided";
+		}
+	}
 
 	private ResourceResolver getResourceResolver() {
 		ResourceResolver resourceResolver = null;

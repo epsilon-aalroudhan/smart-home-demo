@@ -1,5 +1,9 @@
+com/epsilon/smarthome/core/servlets/WorkFlowApprovalServlet.class
+utils/WorkFlowProgress.class
+com/epsilon/smarthome/core/services/impl/PDFServiceImpl.class
+com/epsilon/smarthome/core/filters/LoggingFilter.class
 com/epsilon/smarthome/core/listeners/SimpleResourceListener.class
 com/epsilon/smarthome/core/servlets/SmartHomeServlet.class
 com/epsilon/smarthome/core/schedulers/SimpleScheduledTask.class
 com/epsilon/smarthome/core/package-info.class
-com/epsilon/smarthome/core/filters/LoggingFilter.class
+com/epsilon/smarthome/core/services/PDFService.class

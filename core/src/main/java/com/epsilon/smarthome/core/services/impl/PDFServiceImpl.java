@@ -2,7 +2,6 @@ package com.epsilon.smarthome.core.services.impl;
 import java.util.Calendar; 
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
-import org.xhtmlrenderer.pdf.ITextRenderer;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
@@ -75,7 +74,7 @@ private ResourceResolverFactory resolverFactory;
 public String createPDF(String filename,String value) {
 // This custom AEM service creates a PDF document using PDFBOX API and stores the PDF in the AEM JCR
           
-try
+/*try
 {
 	ITextRenderer renderer = new ITextRenderer();
 
@@ -132,7 +131,7 @@ private String writeToDam(InputStream is, String fileName)
 catch(Exception e)
 {
     e.printStackTrace();
-}
+}*/
 return null; 
 }
 }
