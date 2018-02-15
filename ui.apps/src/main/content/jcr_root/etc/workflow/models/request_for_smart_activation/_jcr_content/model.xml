@@ -5,9 +5,9 @@
     jcr:uuid="a5f66ca9-550d-4852-8a92-468f418d1823"
     sling:resourceType="cq/workflow/components/model"
     description="This is the default request for activation workflow"
-    title="Request for Activation">
+    title="Request for Smart Activation">
     <metaData
-        cq:lastModified="{Long}1518666134420"
+        cq:lastModified="{Long}1518670930539"
         cq:lastModifiedBy="admin"
         jcr:primaryType="nt:unstructured"
         multiResourceSupport="true"
@@ -41,17 +41,6 @@
         </node2>
         <node3
             jcr:primaryType="cq:WorkflowNode"
-            description="Waiting for activation until the scheduled time is reached"
-            title="Waiting for activation"
-            type="PARTICIPANT">
-            <metaData
-                jcr:primaryType="nt:unstructured"
-                PARTICIPANT="administrators"
-                timeoutHandler="com.day.cq.workflow.timeout.autoadvance.AbsoluteTimeAutoAdvancer"
-                timeoutMillis="0"/>
-        </node3>
-        <node4
-            jcr:primaryType="cq:WorkflowNode"
             description="Activates the page."
             title="Activate Page"
             type="PROCESS">
@@ -59,13 +48,13 @@
                 jcr:primaryType="nt:unstructured"
                 PROCESS="com.day.cq.wcm.workflow.process.ActivatePageProcess"
                 PROCESS_AUTO_ADVANCE="true"/>
-        </node4>
-        <node5
+        </node3>
+        <node4
             jcr:primaryType="cq:WorkflowNode"
             title="End"
             type="END">
             <metaData jcr:primaryType="nt:unstructured"/>
-        </node5>
+        </node4>
     </nodes>
     <transitions jcr:primaryType="nt:unstructured">
         <node0_x0023_node1
@@ -92,15 +81,8 @@
         <node3_x0023_node4
             jcr:primaryType="cq:WorkflowTransition"
             from="node3"
-            rule=""
             to="node4">
             <metaData jcr:primaryType="nt:unstructured"/>
         </node3_x0023_node4>
-        <node4_x0023_node5
-            jcr:primaryType="cq:WorkflowTransition"
-            from="node4"
-            to="node5">
-            <metaData jcr:primaryType="nt:unstructured"/>
-        </node4_x0023_node5>
     </transitions>
 </jcr:root>
