@@ -81,6 +81,7 @@ public class ApproveWorkflowListServlet extends SlingAllMethodsServlet {
 			response.getWriter().write(count + " workflow(s) approved for activation");
 		} catch (Exception e) {
 			log.error("", e);
+			response.getWriter().write("Oops!! Something went wrong");
 		} finally {
 			jcrUtilService.closeResolver(resourceResolver);
 		}
