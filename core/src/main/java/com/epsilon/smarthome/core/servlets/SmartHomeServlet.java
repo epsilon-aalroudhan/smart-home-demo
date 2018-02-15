@@ -15,6 +15,14 @@
  */
 package com.epsilon.smarthome.core.servlets;
 
+import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
+
+import javax.jcr.Node;
+import javax.jcr.Session;
+import javax.servlet.ServletException;
+
 import org.apache.felix.scr.annotations.Property;
 import org.apache.felix.scr.annotations.Reference;
 import org.apache.felix.scr.annotations.sling.SlingServlet;
@@ -23,28 +31,15 @@ import org.apache.sling.api.SlingHttpServletResponse;
 import org.apache.sling.api.resource.LoginException;
 import org.apache.sling.api.resource.Resource;
 import org.apache.sling.api.resource.ResourceResolver;
+import org.apache.sling.api.resource.ResourceResolverFactory;
 import org.apache.sling.api.servlets.SlingAllMethodsServlet;
 import org.apache.sling.api.servlets.SlingSafeMethodsServlet;
-import org.apache.sling.commons.json.JSONException;
-import org.apache.sling.commons.json.JSONObject;
-import org.apache.sling.api.resource.ResourceResolverFactory;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.adobe.granite.crypto.CryptoException;
-import com.adobe.granite.crypto.CryptoSupport;
-import com.adobe.granite.workflow.WorkflowException;
 import com.adobe.granite.workflow.WorkflowSession;
-import com.adobe.granite.workflow.exec.Workflow;
 import com.adobe.granite.workflow.exec.WorkflowData;
-
-import javax.jcr.Node;
-import javax.jcr.Session;
-import javax.servlet.ServletException;
-import java.io.IOException;
-import java.util.HashMap;
-import java.util.Map;
+import com.adobe.granite.workflow.model.WorkflowModel;
 
 /**
  * Servlet that writes some sample content into the response. It is mounted for
@@ -65,14 +60,11 @@ public class SmartHomeServlet extends SlingAllMethodsServlet {
 
 	@Reference
 	private ResourceResolverFactory resolverFactory;
-	
-	@Reference
-    private CryptoSupport cryptoSupport;
 
 	@Override
-	public void doGet(SlingHttpServletRequest request, SlingHttpServletResponse response)
+	public void doPost(SlingHttpServletRequest request, SlingHttpServletResponse response)
 			throws ServletException, IOException {
-		
+
 		wfRequest = request;
 		log.debug("Entered Do Post");
 		try {
@@ -80,9 +72,6 @@ public class SmartHomeServlet extends SlingAllMethodsServlet {
 			if (request.getParameter("title") != null || request.getParameter("body") != null) {
 				this.title = request.getParameter("title");
 				this.body = request.getParameter("body");
-
-				
-
 				// todo change this to the path of the page where the component sits
 				// keep the /jcr:content/sh-article
 				Resource res = this.resourceResolver.getResource("/content/smart-home/en/jcr:content/par/sh_article");
@@ -96,6 +85,16 @@ public class SmartHomeServlet extends SlingAllMethodsServlet {
 
 					Session session = this.resourceResolver.adaptTo(Session.class);
 					session.save();
+					WorkflowSession wfSession = resourceResolver.adaptTo(WorkflowSession.class);
+					// Get the workflow model
+					WorkflowModel wfModel = wfSession.getModel("/etc/workflow/models/request_for_smart_activation/jcr:content/model");
+
+					// Get the workflow data
+					// The first param in the newWorkflowData method is the payloadType. Just a
+					// fancy name to let it know what type of workflow it is working with.
+					WorkflowData wfData = wfSession.newWorkflowData("JCR_PATH", "/content/smart-home/en");
+					// Run the Workflow.
+					wfSession.startWorkflow(wfModel, wfData);
 					response.getWriter().write("Title and Body Updated successfully");
 				}
 			} else {
@@ -104,12 +103,11 @@ public class SmartHomeServlet extends SlingAllMethodsServlet {
 
 		} catch (Exception e) {
 			log.error("", e);
+			response.getWriter().write("Error while updating content");
 		} finally {
 			closeResolver(this.resourceResolver);
 		}
 	}
-	
-	
 
 	private ResourceResolver getResourceResolver() {
 		ResourceResolver resourceResolver = null;
