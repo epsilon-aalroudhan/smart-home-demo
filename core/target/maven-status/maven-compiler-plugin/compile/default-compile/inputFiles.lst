@@ -1,5 +1,9 @@
 /Users/aalroudhan/Documents/projects/SmartHome/core/src/main/java/com/epsilon/smarthome/core/schedulers/SimpleScheduledTask.java
 /Users/aalroudhan/Documents/projects/SmartHome/core/src/main/java/com/epsilon/smarthome/core/servlets/SmartHomeServlet.java
 /Users/aalroudhan/Documents/projects/SmartHome/core/src/main/java/com/epsilon/smarthome/core/package-info.java
+/Users/aalroudhan/Documents/projects/SmartHome/core/src/main/java/com/epsilon/smarthome/core/servlets/WorkFlowApprovalServlet.java
+/Users/aalroudhan/Documents/projects/SmartHome/core/src/main/java/utils/WorkFlowProgress.java
 /Users/aalroudhan/Documents/projects/SmartHome/core/src/main/java/com/epsilon/smarthome/core/filters/LoggingFilter.java
+/Users/aalroudhan/Documents/projects/SmartHome/core/src/main/java/com/epsilon/smarthome/core/services/PDFService.java
 /Users/aalroudhan/Documents/projects/SmartHome/core/src/main/java/com/epsilon/smarthome/core/listeners/SimpleResourceListener.java
+/Users/aalroudhan/Documents/projects/SmartHome/core/src/main/java/com/epsilon/smarthome/core/services/impl/PDFServiceImpl.java

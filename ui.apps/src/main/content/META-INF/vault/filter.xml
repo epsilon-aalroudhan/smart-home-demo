@@ -5,4 +5,5 @@
     </filter>
     <filter root="/apps/sling" />
     <filter root="/etc/designs/smart-home"/>
+     <filter root="/etc/workflow/models/request_for_smart_activation"/>
 </workspaceFilter>
